@@ -168,7 +168,7 @@ async function main(): Promise<void> {
     const userRecords = [
         {
             id: seedObject.john,
-            mobile: faker.phone.number(),
+            mobile: '639170000001',
             displayName: 'John Doe',
             balance: johnBalance,
             dailyUsed: new Prisma.Decimal(transactionRecords[0].amount),
@@ -178,7 +178,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.mark,
-            mobile: faker.phone.number(),
+            mobile: '639170000002',
             displayName: 'Mark Doe',
             balance: markBalance,
             dailyUsed: new Prisma.Decimal('0.00'),
@@ -188,7 +188,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.juan,
-            mobile: faker.phone.number(),
+            mobile: '639170000003',
             displayName: 'Juan Doe',
             balance: new Prisma.Decimal(phpBalance(16000, 50000)),
             dailyUsed: new Prisma.Decimal('0.00'),
@@ -198,7 +198,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.marco,
-            mobile: faker.phone.number(),
+            mobile: '639170000004',
             displayName: 'Marco Doe',
             balance: marcoBalance,
             dailyUsed: new Prisma.Decimal(transactionRecords[1].amount),

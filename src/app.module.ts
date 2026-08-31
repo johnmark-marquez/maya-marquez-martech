@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { createObserveModule } from '@nestjs/observe';
 
 // Import modules here for visibility
-import { HealthModule } from './health/health.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { HealthModule } from './modules/health/health.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
 
 
 

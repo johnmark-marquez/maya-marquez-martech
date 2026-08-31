@@ -52,6 +52,8 @@
  - Users can not send money > their remaining balance
  - Users can transfer money without a minimum amount
  - No duplicate mobile numbers
+ - Separate User schema and PII schema
+ 
 ## Before a production launch 
 
 ## Project setup
