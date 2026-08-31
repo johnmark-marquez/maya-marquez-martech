@@ -48,7 +48,10 @@
 ## Sample requests for the main flows
 
 ## Assumptions
-
+ - Not all users starts from the same balance (Test data)
+ - Users can not send money > their remaining balance
+ - Users can transfer money without a minimum amount
+ - No duplicate mobile numbers
 ## Before a production launch 
 
 ## Project setup
