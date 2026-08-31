@@ -1,12 +1,14 @@
 services:
   postgres:
     image: postgres:17
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: maya
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d maya"]
       interval: 10s
       timeout: 5s
       retries: 5
