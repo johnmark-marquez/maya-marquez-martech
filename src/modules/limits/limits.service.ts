@@ -2,8 +2,9 @@ import { Injectable, NotFoundException   } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { LimitWindowDto, UserLimitsResponseDto } from "./dto/user-limits-response.dto";
 import { Prisma } from "@prisma/client";
-import { endOfDayManila, endOfMonthManila, formatManilaIso, isSameDayAsManila, isSameMonthAsManila, startOfDayInManila, startOfMonthInManila } from "../../common/manila-timezone";
+import { endOfDayManila, endOfMonthManila, formatManilaIso, startOfDayInManila, startOfMonthInManila } from "../../common/manila-timezone";
 import { remainingAmount } from "./utils/remaining";
+import { limitWindowPassed, updateUsageBasedOnWindowLimits, UsageBuckets } from "./utils/limitWindows";
 
 @Injectable()
 export class LimitsService {
@@ -26,18 +27,18 @@ export class LimitsService {
             const now = new Date()
             const data: Prisma.LimitUsageUpdateInput = {}
 
-            if (!isSameDayAsManila(now, userUsage.dailyPeriodStart)) {
-                data.dailyUsed = new Prisma.Decimal(0)
-                data.dailyPeriodStart = startOfDayInManila(now)
-            }
+            const syncedLimitUsage = updateUsageBasedOnWindowLimits(userUsage, now)
 
-            if (!isSameMonthAsManila(now, userUsage.monthlyPeriodStart)) {
-                data.monthlyUsed = new Prisma.Decimal(0)
-                data.monthlyPeriodStart = startOfMonthInManila(now)
-            }
-
-            if (Object.keys(data).length > 0) {
-                userUsage = await tx.limitUsage.update({ where: { userId}, data})
+            if (limitWindowPassed(userUsage, syncedLimitUsage)) {
+                  userUsage = await tx.limitUsage.update({ 
+                    where: { userId }, 
+                    data: {
+                        dailyUsed: syncedLimitUsage.dailyUsed,
+                        monthlyUsed: syncedLimitUsage.monthlyUsed,
+                        dailyPeriodStart: syncedLimitUsage.dailyPeriodStart,
+                        monthlyPeriodStart: syncedLimitUsage.monthlyPeriodStart
+                    }
+                })
             }
 
             return {
