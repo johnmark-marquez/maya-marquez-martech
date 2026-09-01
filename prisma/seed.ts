@@ -12,6 +12,7 @@ const seedObject = {
     marco: '44444444-4444-4444-8444-444444444444',
     transferFromJohnToMark: '55555555-5555-4555-8555-555555555555',
     transferFromMarcoToMark: '66666666-6666-4666-8666-666666666666',
+    transferFromJuanToMark: '77777777-7777-3777-0333-777777777777'
 };
 
 faker.seed(123); // Seed the random number generator for reproducibility
@@ -153,10 +154,18 @@ async function main(): Promise<void> {
             id: seedObject.transferFromMarcoToMark,
             senderId: seedObject.marco,
             recipientId: seedObject.mark,
-            amount: new Prisma.Decimal(phpBalance(10000, 15000)),
+            amount: new Prisma.Decimal(phpBalance(45000, 50000)),
             createdAt: new Date(),
             status: TransactionStatus.COMPLETED,
         },
+        {
+            id: seedObject.transferFromJuanToMark,
+            senderId: seedObject.juan,
+            recipientId: seedObject.mark,
+            amount: new Prisma.Decimal(phpBalance(490000, 490000)),
+            createdAt: new Date(),
+            status: TransactionStatus.COMPLETED
+        }
     ];
 
 
@@ -170,7 +179,7 @@ async function main(): Promise<void> {
     const johnSent = new Prisma.Decimal(transactionRecords[0].amount.toString());
     const johnBalance = johnBase.sub(johnSent);
 
-    const marcoBase = new Prisma.Decimal(phpBalance(30000, 50000));
+    const marcoBase = new Prisma.Decimal(phpBalance(80000, 100000));
     const marcoSent = new Prisma.Decimal(transactionRecords[1].amount.toString());
     const marcoBalance = marcoBase.sub(marcoSent);
 
@@ -204,9 +213,9 @@ async function main(): Promise<void> {
             id: seedObject.juan,
             mobile: '+639170000003',
             displayName: 'Juan Doe',
-            balance: new Prisma.Decimal(phpBalance(16000, 50000)),
+            balance: new Prisma.Decimal(phpBalance(50000, 100000)),
             dailyUsed: new Prisma.Decimal('0.00'),
-            monthlyUsed: new Prisma.Decimal('0.00'),
+            monthlyUsed: new Prisma.Decimal(transactionRecords[2].amount),
             dailyPeriodStart: todayStart,
             monthlyPeriodStart: monthStart,
         },
