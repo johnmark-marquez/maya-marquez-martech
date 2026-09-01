@@ -1,19 +1,18 @@
 import { Prisma, PrismaClient, TransactionStatus, UserStatus } from '@prisma/client';
-import { uuid } from 'uuidv4';
 import { faker } from '@faker-js/faker';
 
 const DAILY_LIMIT = '50000.00';
 const MONTHLY_LIMIT = '500000.00';
 
 const seedObject = {
-    policyCode: "SEND_MONEY",
-    john: uuid(),
-    mark: uuid(),
-    juan: uuid(),
-    marco: uuid(),
-    transferFromJohnToMark: uuid(),
-    transferFromMarcoToMark: uuid(),
-}
+    policyCode: 'SEND_MONEY',
+    john: '11111111-1111-4111-8111-111111111111',
+    mark: '22222222-2222-4222-8222-222222222222',
+    juan: '33333333-3333-4333-8333-333333333333',
+    marco: '44444444-4444-4444-8444-444444444444',
+    transferFromJohnToMark: '55555555-5555-4555-8555-555555555555',
+    transferFromMarcoToMark: '66666666-6666-4666-8666-666666666666',
+};
 
 faker.seed(123); // Seed the random number generator for reproducibility
 
