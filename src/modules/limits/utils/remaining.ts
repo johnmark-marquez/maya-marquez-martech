@@ -1,4 +1,4 @@
-// Utility to get remainng amount for the usage limit
+// Utility to get remaining amount for the usage limit
 
 import { Prisma } from "@prisma/client";
 
