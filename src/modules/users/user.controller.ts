@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common'
 import {
     ApiCreatedResponse,
     ApiNotFoundResponse,
@@ -11,11 +11,14 @@ import { UserResponseDto } from './dto/user-response.dto'
 import { UsersService } from './user.service'
 import { UserLimitsResponseDto } from '../limits/dto/user-limits-response.dto'
 import { LimitsService } from '../limits/limits.service'
+import { PaginatedTransactionsDto } from '../transfers/dto/paginated-transactions.dto'
+import { ListTransactionsQueryDto } from '../transfers/dto/list-transactions-query.dto'
+import { TransfersService } from '../transfers/transfers.service'
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-    constructor(private readonly usersService: UsersService, private readonly limitsService: LimitsService) {}
+    constructor(private readonly usersService: UsersService, private readonly limitsService: LimitsService, private readonly transfersService: TransfersService) {}
 
     @Post()
     @ApiOperation({
@@ -58,4 +61,20 @@ export class UserController {
         return this.limitsService.getByUserId(id)
     }
 
+    @Get(':id/transactions')
+    @ApiOperation({
+        summary: 'List sent and received transfers for a user'
+    })
+    @ApiOkResponse({ type: PaginatedTransactionsDto })
+    @ApiNotFoundResponse()
+    listTransactions(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Query() query: ListTransactionsQueryDto
+    ): Promise<PaginatedTransactionsDto> {
+        return this.transfersService.listByUserId(
+            id,
+            query.page ?? 1,
+            query.pageSize ?? 20
+        )
+    }
 }

@@ -6,6 +6,7 @@ import { Prisma, TransactionStatus } from "@prisma/client";
 import { isTransferAllowed, remainingAmount } from "../limits/utils/remaining";
 import { updateUsageBasedOnWindowLimits } from "../limits/utils/limitWindows";
 import { LimitExceededException } from "../limits/utils/limit-exceeded.exception";
+import { PaginatedTransactionsDto } from "./dto/paginated-transactions.dto";
 
 @Injectable()
 export class TransfersService {
@@ -106,6 +107,35 @@ export class TransfersService {
 
             return this.mapToResponse(transaction)
         })
+    }
+
+    async listByUserId(userId: string, page = 1, pageSize = 20): Promise<PaginatedTransactionsDto> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId }})
+        if (!user) throw new NotFoundException(`User ${userId} not found`)
+        
+        const query = {
+            OR: [{ senderId: userId}, { recipientId: userId }]
+        }
+
+        const [total, rows] = await Promise.all([
+            this.prisma.transaction.count({ where: query }),
+            this.prisma.transaction.findMany({
+                where: query,
+                orderBy: { createdAt: 'desc'},
+                skip: (page - 1) * pageSize,
+                take: pageSize
+            })
+        ])
+
+        return {
+            items: rows.map((row) => ({
+                ...this.mapToResponse(row),
+                transactionItem: row.senderId === userId ? 'SENT' : 'RECEIVED'
+            })),
+            page,
+            pageSize,
+            total
+        }
     }
 
     private mapToResponse(transfer: {
