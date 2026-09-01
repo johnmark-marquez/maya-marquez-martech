@@ -45,8 +45,8 @@ export class UserController {
     })
     @ApiOkResponse({ type: UserResponseDto, isArray: true })
     @ApiNotFoundResponse()
-    findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto[]> {
-        return this.usersService.findAll()
+    findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
+        return this.usersService.findOne(id)
     }
 
     @Get(':id/limits')
