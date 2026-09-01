@@ -24,13 +24,13 @@ export function updateUsageBasedOnWindowLimits(
       // Reset Monyhly Usage Limit
     if (!isSameMonthAsManila(now, usage.dailyPeriodStart)) {
         nextUsage.monthlyUsed = new Prisma.Decimal(0)
-        nextUsage.monthyPeriodStart = startOfDayInManila(now)
+        nextUsage.monthlyPeriodStart = startOfDayInManila(now)
     }
     return nextUsage
 }
 
 export function limitWindowPassed(before: UsageBuckets, after: UsageBuckets): boolean {
     return (
-        before.dailyPeriodStart.getTime() !== after.dailyPeriodStart.getTime() || before.monthyPeriodStart.getTime() !== after.monthyPeriodStart.getTime()
+        before.dailyPeriodStart.getTime() !== after.dailyPeriodStart.getTime() || before.monthlyPeriodStart.getTime() !== after.monthlyPeriodStart.getTime()
     )
 }
