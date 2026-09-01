@@ -6,6 +6,7 @@ import { HealthModule } from './modules/health/health.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { UsersModule } from './modules/users/user.module';
 import { LimitsModule } from './modules/limits/limits.module';
+import { TransfersModule } from './modules/transfers/transfers.module';
 
 
 
@@ -23,7 +24,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     HealthModule,
     PrismaModule,
     UsersModule,
-    LimitsModule
+    LimitsModule,
+    TransfersModule
   ],
   providers: [],
 })

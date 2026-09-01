@@ -6,3 +6,7 @@ export function remainingAmount(cap: Prisma.Decimal, used: Prisma.Decimal): Pris
    const remaining = cap.minus(used)
    return remaining.isNegative() ? new Prisma.Decimal(0) : remaining
 }
+
+export function isTransferAllowed(cap: Prisma.Decimal, used: Prisma.Decimal, amount: Prisma.Decimal): boolean {
+   return used.plus(amount).lessThanOrEqualTo(cap)
+}
