@@ -23,6 +23,9 @@ Send Money API technical exam for Maya Martech using NodeJS, NestJS, PostgreSQL 
 
 ## How to install and run the project
 
+ - Create a file called `.env`. // Edit this later
+ - Assuming Docker is already installed and setup correctly, run `docker compose up --build` for building the container first. This will ensure that the container is built, the seeded Users, Transactions, and Limits are transferred to the PostgreSQL database as well.
+
 ## Swagger URL
 
 The Swagger URL can be access after running `docker compose up` on `http://localhost:3000/api/docs`
