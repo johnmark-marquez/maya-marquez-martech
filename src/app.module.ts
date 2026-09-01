@@ -5,6 +5,7 @@ import { createObserveModule } from '@nestjs/observe';
 import { HealthModule } from './modules/health/health.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { UsersModule } from './modules/users/user.module';
+import { LimitsModule } from './modules/limits/limits.module';
 
 
 
@@ -21,7 +22,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     HealthModule,
     PrismaModule,
-    UsersModule
+    UsersModule,
+    LimitsModule
   ],
   providers: [],
 })

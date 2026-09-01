@@ -4,7 +4,6 @@ import { startOfDayInManila, startOfMonthInManila } from "../../common/manila-ti
 import { PrismaService } from "../prisma/prisma.service"
 import { CreateUserDto } from "./dto/create-user.dto"
 import { UserResponseDto } from "./dto/user-response.dto"
-import { identity } from "rxjs"
 
 type UserWithPiiAndWallet = Prisma.UserGetPayload<{ include: { identity: true, wallet: true }}>
 

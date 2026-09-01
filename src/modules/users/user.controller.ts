@@ -9,11 +9,13 @@ import {
 import { CreateUserDto } from './dto/create-user.dto'
 import { UserResponseDto } from './dto/user-response.dto'
 import { UsersService } from './user.service'
+import { UserLimitsResponseDto } from '../limits/dto/user-limits-response.dto'
+import { LimitsService } from '../limits/limits.service'
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService, private readonly limitsService: LimitsService) {}
 
     @Post()
     @ApiOperation({
@@ -42,6 +44,18 @@ export class UserController {
     @ApiNotFoundResponse()
     findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto[]> {
         return this.usersService.findAll()
+    }
+
+    @Get(':id/limits')
+    @ApiOperation({
+        summary: 'Gets send money limits for a user',
+    })
+    @ApiOkResponse({ type: UserLimitsResponseDto })
+    @ApiNotFoundResponse()
+    getUserLimits(
+        @Param('id', ParseUUIDPipe) id: string
+    ): Promise<UserLimitsResponseDto> {
+        return this.limitsService.getByUserId(id)
     }
 
 }
