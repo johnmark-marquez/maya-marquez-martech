@@ -20,7 +20,7 @@ import { CreateTransferDto } from './dto/create-transfer.dto'
 import { TransferResponseDto } from './dto/transfer-response.dto'
 import { TransfersService } from './transfers.service'
 
-@ApiTags('transfers')
+@ApiTags('Transfers')
 @Controller('transfers')
 export class TransfersController {
     constructor (private readonly transfersService: TransfersService) {}
