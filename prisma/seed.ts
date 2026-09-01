@@ -39,6 +39,8 @@ function startOfMonthInManila(date: Date): Date {
 
 const prisma = new PrismaClient();
 
+const seenMobiles = new Set<string>();
+
 const upsertUser = async (params: {
     id: string;
     mobile: string;
@@ -51,6 +53,14 @@ const upsertUser = async (params: {
 }) => {
     const { id, mobile, displayName, balance, dailyUsed, monthlyUsed, dailyPeriodStart, monthlyPeriodStart } = params;
 
+    if (seenMobiles.has(mobile)) {
+        console.warn(`Skipping duplicate mobile during seed: ${mobile}`);
+        return;
+    }
+
+    // Adding to mobile to the set so that if the user runs docker compose up again, there would not be an issue when seeding the same number
+    seenMobiles.add(mobile);
+
     await prisma.user.upsert({
         where: { id },
         create: {
@@ -62,18 +72,23 @@ const upsertUser = async (params: {
         },
     });
 
-    await prisma.identity.upsert({
-        where: { userId: id },
-        create: {
-            userId: id,
-            mobile,
-            displayName,
-        },
-        update: {
-            mobile,
-            displayName,
-        },
-    });
+    try {
+        await prisma.identity.upsert({
+            where: { userId: id },
+            create: {
+                userId: id,
+                mobile,
+                displayName,
+            },
+            update: {
+                mobile,
+                displayName,
+            },
+        });
+    } catch (error) {
+        console.warn(`Skipping identity seed for ${displayName} because mobile ${mobile} already exists.`);
+        return;
+    }
 
     await prisma.wallet.upsert({
         where: { userId: id },
@@ -168,7 +183,7 @@ async function main(): Promise<void> {
     const userRecords = [
         {
             id: seedObject.john,
-            mobile: '639170000001',
+            mobile: '+639170000001',
             displayName: 'John Doe',
             balance: johnBalance,
             dailyUsed: new Prisma.Decimal(transactionRecords[0].amount),
@@ -178,7 +193,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.mark,
-            mobile: '639170000002',
+            mobile: '+639170000002',
             displayName: 'Mark Doe',
             balance: markBalance,
             dailyUsed: new Prisma.Decimal('0.00'),
@@ -188,7 +203,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.juan,
-            mobile: '639170000003',
+            mobile: '+639170000003',
             displayName: 'Juan Doe',
             balance: new Prisma.Decimal(phpBalance(16000, 50000)),
             dailyUsed: new Prisma.Decimal('0.00'),
@@ -198,7 +213,7 @@ async function main(): Promise<void> {
         },
         {
             id: seedObject.marco,
-            mobile: '639170000004',
+            mobile: '+639170000004',
             displayName: 'Marco Doe',
             balance: marcoBalance,
             dailyUsed: new Prisma.Decimal(transactionRecords[1].amount),
