@@ -43,7 +43,7 @@ The Swagger URL can be access after running `docker compose up` on `http://local
  -H 'accept: */*' \
  -H 'Content-Type: application/json' \
  -d '{
- "mobile": "+63917973212345",
+ "mobile": "+639171234567",
  "displayName": "Jay Marquez",
  "initialBalance": "2000"
  }'
@@ -74,7 +74,7 @@ The Swagger URL can be access after running `docker compose up` on `http://local
  "amount": "500.00",
  "note": "For KKB" }'
 
- # Over daily cap - Error 422 for exceeding the monthly cap
+ # Over daily cap - Error 422 for exceeding the daily cap
  curl -X 'POST' \
  'http://localhost:3000/api/transfers' \
  -H 'accept: application/json' \
@@ -87,7 +87,7 @@ The Swagger URL can be access after running `docker compose up` on `http://local
 }'
 
 
- # Over monthly cap - Error 422 for exeeding
+ # Over monthly cap - Error 422 for exceeding the monthly cap
    curl -X 'POST' \
  'http://localhost:3000/api/transfers' \
  -H 'accept: application/json' \
